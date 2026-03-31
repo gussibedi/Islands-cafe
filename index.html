@@ -6,1237 +6,1344 @@
 <title>Islands Cafe — White Rock, BC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@200;300;400&family=IM+Fell+English:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════
+   ISLANDS CAFE — APEX EDITION
+   White Rock, British Columbia
+═══════════════════════════════════════ */
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
+
 :root {
-  --cream:    #F7F2EA;
-  --parchment:#EDE5D5;
-  --sand:     #D4C4A8;
-  --warm:     #C8AD85;
-  --gold:     #B8975A;
-  --gold-dim: rgba(184,151,90,0.18);
-  --char:     #2A2520;
-  --char-mid: #3D3630;
-  --char-soft:#6B5F54;
-  --text:     #2A2520;
-  --muted:    #8B7D6E;
-  --border:   rgba(42,37,32,0.1);
+  /* Warm light palette */
+  --ivory:    #F6EFE2;
+  --parch:    #EDE3CE;
+  --warm:     #E2D4BB;
+  --sand:     #CCBA96;
+  --gold:     #B8955A;
+  --goldL:    #CFA86E;
+  --goldD:    #9A7A44;
+  --gold60:   rgba(184,149,90,0.60);
+  --gold30:   rgba(184,149,90,0.30);
+  --gold15:   rgba(184,149,90,0.15);
+  --gold08:   rgba(184,149,90,0.08);
+  --gold03:   rgba(184,149,90,0.03);
+
+  /* Charcoal system */
+  --char:     #1A1814;
+  --charM:    #2C2820;
+  --charS:    #574F42;
+  --muted:    #8C7E6A;
+
+  /* Borders */
+  --br:       rgba(26,24,20,0.10);
+  --brG:      rgba(184,149,90,0.20);
+
+  /* Easing */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--cream);
-  color: var(--text);
+  background: var(--ivory);
+  color: var(--char);
   font-family: 'Jost', sans-serif;
   font-weight: 300;
   overflow-x: hidden;
   cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* CUSTOM CURSOR */
-.cursor {
+/* ─── GRAIN ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.024;
+  pointer-events: none; z-index: 9990;
+}
+
+/* ─── CURSOR ─── */
+#cur {
   position: fixed;
-  width: 10px; height: 10px;
+  width: 6px; height: 6px;
   background: var(--gold);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%,-50%);
-  transition: transform 0.1s, width 0.3s, height 0.3s, opacity 0.3s;
   mix-blend-mode: multiply;
+  transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), opacity 0.3s;
 }
-.cursor-ring {
+#cur.hover { width: 10px; height: 10px; }
+#cur.click { transform: translate(-50%,-50%) scale(0.4); }
+
+#curR {
   position: fixed;
   width: 36px; height: 36px;
-  border: 1px solid var(--gold);
+  border: 0.5px solid var(--gold30);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99998;
   transform: translate(-50%,-50%);
-  transition: transform 0.18s ease, width 0.3s, height 0.3s, opacity 0.3s;
-  opacity: 0.5;
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+  transition: width 0.5s var(--ease-out), height 0.5s var(--ease-out), border-color 0.4s;
 }
-.cursor-ring.hover { width:56px; height:56px; opacity:0.8; }
+#curR.hover { width: 60px; height: 60px; border-color: var(--gold60); opacity: 0.9; }
 
-/* GRAIN OVERLAY */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.028;
-  pointer-events: none;
-  z-index: 9000;
-}
-
-/* LOADER */
+/* ─── LOADER ─── */
 #loader {
   position: fixed; inset: 0;
   background: var(--char);
   z-index: 10000;
-  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 28px;
-  transition: opacity 1s ease 0.2s, visibility 1s ease 0.2s;
+  display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 26px;
+  transition: opacity 1.2s var(--ease-out), visibility 1.2s;
 }
-#loader.out { opacity: 0; visibility: hidden; }
-.loader-mark {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 32px;
-  color: var(--warm);
-  letter-spacing: 0.1em;
-  opacity: 0;
-  animation: fadeIn 0.8s ease 0.3s forwards;
-}
-.loader-sub {
-  font-size: 10px;
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: rgba(200,173,133,0.5);
-  opacity: 0;
-  animation: fadeIn 0.8s ease 0.7s forwards;
-}
-.loader-line {
-  width: 80px; height: 1px;
-  background: rgba(200,173,133,0.2);
-  position: relative; overflow: hidden;
-}
-.loader-line::after {
-  content: '';
-  position: absolute; top:0; left:-100%; width:100%; height:100%;
-  background: var(--warm);
-  animation: lineSlide 1.2s ease 0.5s forwards;
-}
-@keyframes lineSlide { to { left: 100%; } }
-@keyframes fadeIn { to { opacity: 1; } }
+#loader.gone { opacity: 0; visibility: hidden; pointer-events: none; }
 
-/* NAVBAR */
+.l-name {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 36px;
+  color: var(--sand);
+  opacity: 0; transform: translateY(12px);
+  animation: lup 0.9s var(--ease-out) 0.3s forwards;
+  filter: drop-shadow(0 0 20px rgba(204,186,150,0.25));
+}
+.l-loc {
+  font-size: 8.5px; letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: rgba(204,186,150,0.35);
+  opacity: 0;
+  animation: lup 0.7s var(--ease-out) 0.8s forwards;
+}
+.l-bar {
+  width: 100px; height: 0.5px;
+  background: rgba(204,186,150,0.12);
+  position: relative; overflow: hidden;
+  opacity: 0; animation: lup 0.5s var(--ease-out) 0.6s forwards;
+}
+.l-bar::after {
+  content: '';
+  position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, var(--sand), transparent);
+  animation: lsweep 1.8s var(--ease-out) 0.9s forwards;
+}
+@keyframes lsweep { to { left: 100%; } }
+@keyframes lup { to { opacity: 1; transform: translateY(0); } }
+
+/* ─── NAVIGATION ─── */
 nav {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 1000;
-  padding: 32px 60px;
+  padding: 36px 72px;
   display: flex; align-items: center; justify-content: space-between;
-  transition: padding 0.5s, background 0.5s, backdrop-filter 0.5s, border-color 0.5s;
+  transition: padding 0.6s var(--ease-out), background 0.6s, border-color 0.6s;
   border-bottom: 1px solid transparent;
 }
-nav.scrolled {
-  padding: 18px 60px;
-  background: rgba(247,242,234,0.85);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom-color: var(--border);
+nav.sc {
+  padding: 18px 72px;
+  background: rgba(246,239,226,0.90);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border-bottom-color: var(--br);
 }
-.nav-brand {
-  display: flex; flex-direction: column; gap: 2px;
-  text-decoration: none;
-}
-.nav-brand-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  letter-spacing: 0.08em;
-  color: var(--char);
-}
-.nav-brand-loc {
-  font-size: 9px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.nav-links {
-  display: flex; gap: 40px; list-style: none;
-}
-.nav-links a {
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--char-soft);
-  text-decoration: none;
-  transition: color 0.3s;
-  position: relative;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute; left:0; bottom:-3px; width:0; height:1px;
-  background: var(--gold);
-  transition: width 0.3s;
-}
-.nav-links a:hover { color: var(--char); }
-.nav-links a:hover::after { width: 100%; }
-.nav-cta {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  text-decoration: none;
-  border: 1px solid var(--gold);
-  padding: 10px 24px;
-  transition: background 0.3s, color 0.3s;
-}
-.nav-cta:hover { background: var(--gold); color: var(--cream); }
 
-/* HERO */
+.nlogo { text-decoration: none; display: flex; flex-direction: column; gap: 3px; }
+.nname {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; letter-spacing: 0.06em;
+  color: var(--char); font-weight: 400;
+  transition: color 0.3s;
+}
+.nlogo:hover .nname { color: var(--charM); }
+.nloc {
+  font-size: 7.5px; letter-spacing: 0.32em;
+  text-transform: uppercase; color: var(--muted);
+}
+
+.nlinks { display: flex; gap: 44px; list-style: none; }
+.nlinks a {
+  font-size: 9.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--charS);
+  text-decoration: none; position: relative;
+  padding-bottom: 3px;
+  transition: color 0.4s var(--ease-out);
+}
+.nlinks a::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  width: 0; height: 0.5px;
+  background: var(--gold);
+  transition: width 0.5s var(--ease-out);
+}
+.nlinks a:hover { color: var(--char); }
+.nlinks a:hover::after { width: 100%; }
+
+.nvisit {
+  font-size: 9.5px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--gold);
+  border: 0.5px solid var(--gold30);
+  padding: 12px 28px; text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: color 0.4s var(--ease-out), border-color 0.4s;
+}
+.nvisit::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--gold);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s var(--ease-out); z-index: -1;
+}
+.nvisit:hover { color: var(--ivory); border-color: var(--gold); }
+.nvisit:hover::before { transform: scaleX(1); }
+
+/* ─── HERO ─── */
 #hero {
   min-height: 100vh;
   position: relative;
   display: flex; align-items: flex-end;
   overflow: hidden;
+  background: var(--parch);
 }
 
-/* Animated light gradients — the hero's living background */
-.hero-bg {
-  position: absolute; inset: 0;
-  background: var(--parchment);
-  overflow: hidden;
-}
-.light-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
+/* Slow-moving light orbs */
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(96px);
   mix-blend-mode: multiply;
-  animation: orbDrift ease-in-out infinite;
+  animation: orbD ease-in-out infinite;
+  will-change: transform;
 }
-.orb-1 {
-  width: 700px; height: 700px;
-  background: radial-gradient(circle, #D4B896 0%, transparent 70%);
-  top: -200px; right: -100px;
-  opacity: 0.6;
-  animation-duration: 20s;
-}
-.orb-2 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, #C8A870 0%, transparent 70%);
-  bottom: -100px; left: -50px;
-  opacity: 0.4;
-  animation-duration: 25s;
-  animation-direction: reverse;
-}
-.orb-3 {
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, #E8D5B0 0%, transparent 70%);
-  top: 30%; left: 30%;
-  opacity: 0.5;
-  animation-duration: 18s;
-  animation-delay: -8s;
-}
-@keyframes orbDrift {
-  0%   { transform: translate(0,0); }
-  30%  { transform: translate(30px,-40px); }
-  60%  { transform: translate(-20px,30px); }
-  100% { transform: translate(0,0); }
+.o1 { width: 720px; height: 720px; background: radial-gradient(circle, #D4B890 0%, transparent 70%); top:-220px; right:-120px; opacity:.55; animation-duration:22s; }
+.o2 { width: 540px; height: 540px; background: radial-gradient(circle, #C8A870 0%, transparent 70%); bottom:-120px; left:-60px; opacity:.38; animation-duration:28s; animation-direction:reverse; }
+.o3 { width: 400px; height: 400px; background: radial-gradient(circle, #E4CFA0 0%, transparent 70%); top:35%; left:32%; opacity:.42; animation-duration:19s; animation-delay:-9s; }
+@keyframes orbD {
+  0%,100% { transform: translate(0,0); }
+  30% { transform: translate(24px,-32px); }
+  65% { transform: translate(-16px,24px); }
 }
 
-/* Fine grid texture */
-.hero-grid {
+/* Fine precision grid */
+.h-grid {
   position: absolute; inset: 0;
   background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.4;
+    linear-gradient(var(--br) 1px, transparent 1px),
+    linear-gradient(90deg, var(--br) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.45;
 }
 
-.hero-content {
-  position: relative; z-index: 2;
-  width: 100%;
-  padding: 0 60px 100px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: flex-end;
-  gap: 40px;
-}
-
-.hero-left { }
-
-.hero-eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 24px;
-  opacity: 0; transform: translateY(20px);
-  animation: riseIn 0.8s ease forwards 1.8s;
-}
-
-.hero-title {
+/* Large watermark */
+.h-wm {
+  position: absolute;
+  left: -80px; top: 50%;
+  transform: translateY(-50%);
   font-family: 'Playfair Display', serif;
-  font-size: clamp(56px, 7vw, 100px);
-  line-height: 1.05;
-  font-weight: 400;
-  color: var(--char);
-  letter-spacing: -0.01em;
-  opacity: 0; transform: translateY(30px);
-  animation: riseIn 1s ease forwards 2s;
-}
-.hero-title em {
-  font-style: italic;
-  color: var(--char-soft);
+  font-size: clamp(320px, 44vw, 560px);
+  font-weight: 300; font-style: italic;
+  color: rgba(184,149,90,0.038);
+  line-height: 1;
+  pointer-events: none; user-select: none;
+  will-change: transform;
+  letter-spacing: -0.04em;
 }
 
-.hero-right {
-  padding-bottom: 12px;
+/* Bottom gradient to make text readable */
+#hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 100% 50% at 50% 100%, rgba(237,227,206,0.95) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 30% at 50% 0%, rgba(237,227,206,0.4) 0%, transparent 100%),
+    radial-gradient(ellipse 60% 100% at 0% 50%, rgba(237,227,206,0.2) 0%, transparent 60%);
+  pointer-events: none; z-index: 1;
 }
 
-.hero-desc {
-  font-size: 16px;
-  line-height: 1.8;
-  color: var(--char-soft);
-  margin-bottom: 36px;
-  max-width: 340px;
-  opacity: 0; transform: translateY(20px);
-  animation: riseIn 0.8s ease forwards 2.3s;
+.h-cont {
+  position: relative; z-index: 2;
+  width: 100%; padding: 0 72px 112px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: flex-end;
 }
 
-.hero-actions {
-  display: flex; gap: 16px; align-items: center;
-  opacity: 0; transform: translateY(20px);
-  animation: riseIn 0.8s ease forwards 2.5s;
+.h-left { }
+.h-eyebrow {
+  display: flex; align-items: center; gap: 16px;
+  font-size: 8.5px; letter-spacing: 0.5em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 32px;
+  opacity: 0; transform: translateY(16px);
+  animation: lup 0.9s var(--ease-out) 2.0s forwards;
+}
+.h-eyebrow::before {
+  content: ''; width: 40px; height: 0.5px;
+  background: linear-gradient(90deg, var(--gold), transparent);
 }
 
-.btn-outline {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--char);
-  text-decoration: none;
-  border: 1px solid var(--char);
-  padding: 14px 32px;
-  transition: background 0.3s, color 0.3s, border-color 0.3s;
+.h-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(60px, 8vw, 120px);
+  font-weight: 300; line-height: 1.0;
+  color: var(--char); letter-spacing: -0.02em;
+  opacity: 0; transform: translateY(36px);
+  animation: lup 1.1s var(--ease-out) 2.1s forwards;
+}
+.h-title em { font-style: italic; color: var(--charS); }
+.h-title .ul {
+  position: relative;
   display: inline-block;
 }
-.btn-outline:hover { background: var(--char); color: var(--cream); }
-
-.btn-text {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  text-decoration: none;
-  display: flex; align-items: center; gap: 10px;
-  transition: gap 0.3s;
+.h-title .ul::after {
+  content: '';
+  position: absolute; bottom: 4px; left: 0;
+  width: 100%; height: 0.5px;
+  background: linear-gradient(90deg, var(--gold), transparent);
 }
-.btn-text:hover { gap: 16px; }
-.btn-text-arrow { font-size: 14px; }
 
-.hero-scroll {
-  position: absolute;
-  bottom: 40px; left: 50%;
-  transform: translateX(-50%);
+.h-right {
+  padding-bottom: 8px;
+  opacity: 0; transform: translateY(20px);
+  animation: lup 0.9s var(--ease-out) 2.3s forwards;
+}
+.h-desc {
+  font-size: 14px; line-height: 1.95;
+  color: var(--charS); margin-bottom: 40px;
+  max-width: 360px; letter-spacing: 0.01em;
+}
+.h-ctas { display: flex; gap: 14px; align-items: center; }
+
+/* Buttons */
+.btn-line {
+  display: inline-block;
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--char); border: 0.5px solid var(--char);
+  padding: 14px 34px; text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: color 0.4s var(--ease-out), border-color 0.4s;
+}
+.btn-line::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--char);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s var(--ease-out); z-index: -1;
+}
+.btn-line:hover { color: var(--ivory); border-color: var(--char); }
+.btn-line:hover::before { transform: scaleX(1); }
+
+.btn-txt {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); text-decoration: none;
+  transition: gap 0.4s var(--ease-out), color 0.3s;
+}
+.btn-txt:hover { gap: 16px; color: var(--goldD); }
+
+/* Scroll indicator */
+.h-scroll {
+  position: absolute; bottom: 40px; right: 72px;
   z-index: 2;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  opacity: 0;
-  animation: riseIn 0.8s ease forwards 3s;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  opacity: 0; animation: lup 0.8s var(--ease-out) 2.8s forwards;
 }
-.hero-scroll span {
-  font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--muted);
+.h-scroll-lbl {
+  font-size: 7.5px; letter-spacing: 0.5em;
+  text-transform: uppercase; color: var(--muted);
   writing-mode: vertical-rl;
 }
-.scroll-dot {
-  width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
-  animation: bounce 2s ease-in-out infinite;
-}
-@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
-
-@keyframes riseIn { to { opacity:1; transform:translateY(0); } }
-
-/* SECTIONS */
-section { padding: 140px 60px; }
-
-.label {
-  font-size: 10px;
-  letter-spacing: 0.4em;
-  text-transform: uppercase;
-  color: var(--gold);
-  display: block;
-  margin-bottom: 20px;
-}
-
-.heading-xl {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(44px, 5vw, 72px);
-  font-weight: 400;
-  line-height: 1.1;
-  color: var(--char);
-  letter-spacing: -0.01em;
-}
-.heading-xl em { font-style: italic; color: var(--char-soft); }
-
-/* REVEAL */
-.reveal { opacity:0; transform:translateY(36px); transition: opacity 0.9s ease, transform 0.9s ease; }
-.reveal.on { opacity:1; transform:translateY(0); }
-.d1 { transition-delay:0.1s; }
-.d2 { transition-delay:0.2s; }
-.d3 { transition-delay:0.3s; }
-.d4 { transition-delay:0.4s; }
-.d5 { transition-delay:0.5s; }
-
-/* EDITORIAL / STORY */
-#story { background: var(--char); }
-
-.story-inner {
-  max-width: 1300px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: center;
-}
-
-.story-visual {
-  position: relative;
-  aspect-ratio: 4/5;
-}
-
-.story-img-frame {
-  width: 100%; height: 100%;
-  background: linear-gradient(160deg, #3D3020 0%, #1E1A14 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Abstract coffee art */
-.coffee-art {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-}
-
-.story-corner {
-  position: absolute; top:0; right:0;
-  width: 50%; height: 50%;
-  border-top: 1px solid rgba(184,151,90,0.4);
-  border-right: 1px solid rgba(184,151,90,0.4);
-}
-.story-corner-bl {
-  position: absolute; bottom:0; left:0;
-  width: 30%; height: 30%;
-  border-bottom: 1px solid rgba(184,151,90,0.2);
-  border-left: 1px solid rgba(184,151,90,0.2);
-}
-
-.story-year {
-  position: absolute;
-  bottom: -20px; left: -20px;
+.h-scroll-dot {
+  width: 5px; height: 5px; border-radius: 50%;
   background: var(--gold);
-  color: var(--char);
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  padding: 14px 22px;
+  animation: dotBob 2.4s ease-in-out infinite;
 }
+@keyframes dotBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
 
-.story-text .label { color: var(--warm); }
-
-.story-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(40px, 4vw, 62px);
-  font-weight: 400;
-  line-height: 1.1;
-  color: var(--cream);
-  margin-bottom: 28px;
-}
-.story-heading em { font-style: italic; color: var(--warm); }
-
-.story-p {
-  font-size: 15px;
-  line-height: 1.9;
-  color: rgba(247,242,234,0.55);
-  margin-bottom: 16px;
-}
-
-.story-divider {
-  width: 40px; height: 1px;
-  background: var(--gold);
-  margin: 32px 0;
-}
-
-.story-values {
-  display: flex; gap: 40px; margin-top: 40px;
-}
-.story-val-num {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 40px;
-  color: var(--warm);
-  line-height: 1;
-}
-.story-val-label {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(200,173,133,0.5);
-  margin-top: 6px;
-}
-
-/* MENU */
-#menu { background: var(--parchment); }
-
-.menu-header {
-  max-width: 1300px; margin: 0 auto 80px;
-  display: flex; justify-content: space-between; align-items: flex-end;
-}
-
-.menu-grid {
-  max-width: 1300px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-}
-
-.menu-card {
-  background: var(--cream);
-  padding: 48px 40px;
+/* ─── MARQUEE ─── */
+.mq-wrap {
+  background: var(--char);
+  padding: 18px 0; overflow: hidden;
   position: relative;
-  cursor: default;
-  transition: background 0.4s, transform 0.4s;
-  overflow: hidden;
 }
-.menu-card::after {
-  content: '';
-  position: absolute; inset:0;
-  background: linear-gradient(135deg, transparent 60%, rgba(184,151,90,0.06) 100%);
-  opacity:0; transition: opacity 0.4s;
+.mq-wrap::before, .mq-wrap::after {
+  content: ''; position: absolute; top:0; bottom:0; width:100px; z-index:2;
 }
-.menu-card:hover { background: var(--cream); transform: translateY(-6px); }
-.menu-card:hover::after { opacity:1; }
-.menu-card:hover .menu-price { color: var(--gold); }
-
-.menu-icon-wrap {
-  width: 48px; height: 48px;
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 28px;
-  font-size: 22px;
-}
-
-.menu-cat {
-  font-size: 9px;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-
-.menu-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 26px;
-  font-weight: 400;
-  color: var(--char);
-  margin-bottom: 12px;
-  line-height: 1.2;
-}
-
-.menu-desc {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.8;
-  margin-bottom: 24px;
-}
-
-.menu-price {
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: 20px;
-  color: var(--char-soft);
+.mq-wrap::before { left:0; background: linear-gradient(to right, var(--char), transparent); }
+.mq-wrap::after { right:0; background: linear-gradient(to left, var(--char), transparent); }
+.mq-track { display:flex; animation: mqs 34s linear infinite; width:max-content; }
+.mq-track:hover { animation-play-state: paused; }
+.mq-item {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 15px; letter-spacing: 0.05em;
+  color: rgba(204,186,150,0.3); padding: 0 40px;
+  white-space: nowrap; border-right: 0.5px solid rgba(255,255,255,0.06);
   transition: color 0.3s;
 }
+.mq-item:hover { color: rgba(204,186,150,0.6); }
+.mq-dot { color: var(--sand); margin-right: 12px; font-style: normal; }
+@keyframes mqs { to { transform: translateX(-50%); } }
 
-.menu-line {
-  width: 100%; height: 1px;
-  background: var(--border);
-  margin: 24px 0;
+/* ─── SECTION SYSTEM ─── */
+.sec { padding: 160px 72px; }
+.sec-lbl {
+  font-size: 8.5px; letter-spacing: 0.5em;
+  text-transform: uppercase; color: var(--gold);
+  display: block; margin-bottom: 20px;
 }
-
-/* GALLERY */
-#gallery { background: var(--cream); }
-
-.gallery-header {
-  max-width: 1300px; margin: 0 auto 60px;
-}
-
-.gallery-mosaic {
-  max-width: 1300px; margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  grid-template-rows: 300px 300px;
-  gap: 4px;
-}
-
-.g-item {
-  overflow: hidden; position: relative; cursor: pointer;
-}
-.g-item:first-child { grid-row: span 2; }
-
-.g-fill {
-  width:100%; height:100%;
-  transition: transform 0.7s cubic-bezier(.25,.46,.45,.94);
-  position: relative;
-  display: flex; align-items: flex-end; padding: 24px;
-}
-.g-item:hover .g-fill { transform: scale(1.04); }
-
-/* Coffee-toned placeholder gradients */
-.gc-1 { background: linear-gradient(160deg, #3A2E24 0%, #1C1610 60%, #2A1E10 100%); }
-.gc-2 { background: linear-gradient(140deg, #4A3828 0%, #2C2018 100%); }
-.gc-3 { background: linear-gradient(140deg, #2E2418 0%, #1A1208 100%); }
-.gc-4 { background: linear-gradient(150deg, #3C2E20 0%, #24180C 100%); }
-.gc-5 { background: linear-gradient(130deg, #342820 0%, #201610 100%); }
-
-.g-overlay {
-  position: absolute; inset:0;
-  background: linear-gradient(to top, rgba(26,18,8,0.7) 0%, transparent 50%);
-  opacity:0; transition: opacity 0.4s;
-}
-.g-item:hover .g-overlay { opacity:1; }
-
-.g-label {
-  position: relative; z-index:1;
-  font-size: 11px; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--warm);
-  opacity:0; transform: translateY(6px);
-  transition: opacity 0.3s, transform 0.3s;
-}
-.g-item:hover .g-label { opacity:1; transform:translateY(0); }
-
-/* Decorative art for gallery tiles */
-.g-art {
-  position: absolute; inset:0;
-  display:flex; align-items:center; justify-content:center;
-  font-size: 60px; color: rgba(200,173,133,0.08);
-  pointer-events:none;
-}
-
-/* TESTIMONIALS */
-#testimonials { background: var(--parchment); }
-
-.t-inner { max-width:900px; margin:0 auto; text-align:center; }
-
-.t-slider { position:relative; overflow:hidden; margin-top: 64px; }
-
-.t-slides { display:flex; transition: transform 0.7s cubic-bezier(.25,.46,.45,.94); }
-
-.t-slide {
-  min-width:100%; padding: 0 40px;
-  display:flex; flex-direction:column; align-items:center; gap:28px;
-}
-
-.t-quote-mark {
-  font-family: 'IM Fell English', serif;
-  font-style: italic;
-  font-size: 80px;
-  color: var(--gold);
-  opacity: 0.3;
-  line-height: 0.6;
-}
-
-.t-text {
+.sec-h {
   font-family: 'Playfair Display', serif;
-  font-style: italic;
-  font-size: clamp(18px, 2.5vw, 24px);
-  line-height: 1.6;
-  color: var(--char);
-  font-weight: 400;
-  max-width: 700px;
+  font-size: clamp(48px, 5.8vw, 80px);
+  font-weight: 300; line-height: 0.98;
+  letter-spacing: -0.015em; color: var(--char);
+}
+.sec-h em { font-style: italic; color: var(--charS); }
+
+/* ─── REVEAL ─── */
+.rv {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 1.1s var(--ease-out), transform 1.1s var(--ease-out);
+}
+.rv.on { opacity: 1; transform: translateY(0); }
+.rvl {
+  opacity: 0; transform: translateX(-32px);
+  transition: opacity 1.1s var(--ease-out), transform 1.1s var(--ease-out);
+}
+.rvl.on { opacity: 1; transform: translateX(0); }
+.rvr {
+  opacity: 0; transform: translateX(32px);
+  transition: opacity 1.1s var(--ease-out), transform 1.1s var(--ease-out);
+}
+.rvr.on { opacity: 1; transform: translateX(0); }
+.d1{transition-delay:0.08s} .d2{transition-delay:0.16s} .d3{transition-delay:0.24s}
+.d4{transition-delay:0.32s} .d5{transition-delay:0.40s}
+
+/* ─── STORY ─── */
+#story { padding: 0; }
+.story-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 680px;
+}
+.story-left {
+  background: var(--char);
+  padding: 110px 88px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-right: 0.5px solid rgba(255,255,255,0.06);
+  position: relative; overflow: hidden;
+}
+/* Ambient glow */
+.story-left::before {
+  content: '';
+  position: absolute; top:50%; left:50%;
+  transform: translate(-50%,-50%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(184,149,90,0.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.story-sh {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(44px, 5vw, 68px);
+  font-weight: 300; line-height: 1.05;
+  color: rgba(246,239,226,0.92); letter-spacing: -0.01em;
+  margin-bottom: 0;
+}
+.story-sh em { font-style: italic; color: var(--sand); }
+.story-lbl { color: rgba(184,149,90,0.65); margin-bottom: 20px; }
+
+.story-right {
+  background: var(--parch);
+  padding: 110px 88px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.story-rule { width: 52px; height: 0.5px; background: var(--gold30); margin: 36px 0; }
+.story-p {
+  font-size: 14.5px; line-height: 2.0;
+  color: var(--charS); margin-bottom: 14px; letter-spacing: 0.01em;
+}
+.story-vals {
+  display: flex; gap: 0;
+  margin-top: 52px; padding-top: 44px;
+  border-top: 0.5px solid var(--br);
+}
+.sv { flex: 1; }
+.sv + .sv { border-left: 0.5px solid var(--br); padding-left: 32px; }
+.sv-n {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 46px;
+  color: var(--gold); line-height: 1;
+  letter-spacing: -0.02em;
+}
+.sv-l {
+  font-size: 8.5px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--muted); margin-top: 8px;
 }
 
-.t-author {
-  font-size: 11px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--muted);
-  display:flex; align-items:center; gap:16px;
+/* ─── MENU ─── */
+#menu {
+  background: var(--parch);
+  padding-left: 0; padding-right: 0;
+  padding-top: 120px; padding-bottom: 120px;
 }
-.t-author::before, .t-author::after {
-  content:''; display:block; width:30px; height:1px; background:var(--sand);
+.mn-head {
+  padding: 0 72px;
+  max-width: 1380px; margin: 0 auto 80px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.mn-head-link {
+  font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+  transition: gap 0.4s var(--ease-out), color 0.3s;
+}
+.mn-head-link:hover { gap: 16px; color: var(--goldD); }
+
+.mn-grid {
+  max-width: 1380px; margin: 0 72px;
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 0.5px; background: var(--br);
+}
+.mn-card {
+  background: var(--ivory);
+  padding: 56px 48px;
+  position: relative; overflow: hidden;
+  cursor: default;
+  transition: transform 0.6s var(--ease-out), box-shadow 0.6s var(--ease-out);
+}
+/* Subtle top reveal glow */
+.mn-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 0; background: linear-gradient(to bottom, var(--gold08), transparent);
+  transition: height 0.6s var(--ease-out);
+}
+/* Bottom sweep */
+.mn-card::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  width: 0; height: 0.5px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  transition: width 0.8s var(--ease-out);
+}
+.mn-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 64px rgba(26,24,20,0.09);
+}
+.mn-card:hover::before { height: 80px; }
+.mn-card:hover::after { width: 100%; }
+.mn-card:hover .mn-price { color: var(--gold); }
+
+.mn-ico {
+  width: 44px; height: 44px;
+  border: 0.5px solid var(--br);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 30px; font-size: 19px;
+  transition: border-color 0.4s;
+}
+.mn-card:hover .mn-ico { border-color: var(--brG); }
+.mn-cat {
+  font-size: 8px; letter-spacing: 0.38em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+}
+.mn-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 27px; font-weight: 300;
+  color: var(--char); margin-bottom: 14px;
+  line-height: 1.1; letter-spacing: -0.01em;
+}
+.mn-name em { font-style: italic; }
+.mn-rule { width: 100%; height: 0.5px; background: var(--br); margin: 20px 0; }
+.mn-desc { font-size: 12.5px; line-height: 1.9; color: var(--muted); margin-bottom: 24px; }
+.mn-price {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 21px; color: var(--charS);
+  transition: color 0.4s var(--ease-out);
 }
 
-.t-stars { color: var(--gold); font-size: 13px; letter-spacing: 3px; }
+/* ─── ATMOSPHERE ─── */
+#atm { background: var(--ivory); padding: 160px 0; }
+.atm-head { padding: 0 72px; max-width: 1380px; margin: 0 auto 64px; }
 
-.t-dots {
-  display:flex; justify-content:center; gap:10px; margin-top:44px;
+.atm-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  grid-template-rows: 400px 260px;
+  gap: 2px;
 }
+.a-item { position: relative; overflow: hidden; cursor: pointer; }
+.a-item:first-child { grid-row: span 2; }
+
+.a-fill {
+  position: absolute; inset: 0;
+  transition: transform 0.9s var(--ease-out);
+  will-change: transform;
+}
+.a-item:hover .a-fill { transform: scale(1.05); }
+
+/* Warm espresso-toned gradients */
+.af1 { background: linear-gradient(155deg, #3C2C14 0%, #1C1408 50%, #2C2010 100%); }
+.af2 { background: linear-gradient(165deg, #2C2010 0%, #160E04 100%); }
+.af3 { background: linear-gradient(135deg, #382814 0%, #1C1408 100%); }
+.af4 { background: linear-gradient(148deg, #2A1E0C 0%, #140E04 100%); }
+.af5 { background: linear-gradient(140deg, #342412 0%, #180E04 100%); }
+
+.a-pat { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+
+.a-over {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(20,12,4,0.82) 0%, rgba(20,12,4,0.2) 40%, transparent 70%);
+  opacity: 0; transition: opacity 0.6s var(--ease-out);
+}
+.a-item:hover .a-over { opacity: 1; }
+
+/* Border reveal */
+.a-item::before {
+  content: '';
+  position: absolute; inset: 0;
+  border: 0.5px solid rgba(184,149,90,0.35);
+  opacity: 0; z-index: 3;
+  transition: opacity 0.5s var(--ease-out);
+}
+.a-item:hover::before { opacity: 1; }
+
+.a-lbl {
+  position: absolute; bottom: 28px; left: 28px;
+  font-size: 9px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--sand);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+  z-index: 4;
+}
+.a-item:hover .a-lbl { opacity: 1; transform: translateY(0); }
+
+/* ─── TESTIMONIALS ─── */
+#testimonials { background: var(--parch); border-top: 0.5px solid var(--br); }
+.t-wrap { max-width: 1000px; margin: 0 auto; text-align: center; }
+
+.t-slides-wrap { position: relative; margin-top: 80px; overflow: hidden; }
+.t-slides-wrap::before, .t-slides-wrap::after {
+  content: ''; position: absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none;
+}
+.t-slides-wrap::before { left:0; background: linear-gradient(to right, var(--parch), transparent); }
+.t-slides-wrap::after { right:0; background: linear-gradient(to left, var(--parch), transparent); }
+
+.t-slides { display:flex; transition: transform 0.9s var(--ease-out); }
+.t-slide {
+  min-width: 100%; padding: 0 80px;
+  display: flex; flex-direction: column; align-items: center; gap: 26px;
+}
+.t-q {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 110px; color: var(--gold15); line-height: 0.5;
+}
+.t-stars { font-size: 13px; letter-spacing: 5px; color: var(--gold); }
+.t-body {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: clamp(21px, 2.4vw, 27px); line-height: 1.6;
+  color: var(--charM); max-width: 700px; font-weight: 300;
+  letter-spacing: -0.01em;
+}
+.t-auth {
+  font-size: 8.5px; letter-spacing: 0.35em;
+  text-transform: uppercase; color: var(--muted);
+  display: flex; align-items: center; gap: 18px;
+}
+.t-auth::before, .t-auth::after {
+  content: ''; display: block;
+  width: 28px; height: 0.5px;
+  background: linear-gradient(90deg, transparent, var(--gold30), transparent);
+}
+.t-dots { display:flex; justify-content:center; gap:12px; margin-top:52px; }
 .t-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--sand); border:none; cursor:pointer; transition:background 0.3s, transform 0.3s;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--warm); border: none; cursor: pointer;
+  transition: background 0.4s, transform 0.4s var(--ease-back), width 0.4s var(--ease-out);
 }
-.t-dot.active { background:var(--gold); transform:scale(1.3); }
-
-/* LOCATION */
-#location { background: var(--char); }
-
-.loc-inner {
-  max-width:1300px; margin:0 auto;
-  display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center;
+.t-dot.on { background: var(--gold); transform: scale(1.5); width: 16px; border-radius: 2px; }
+.t-nav { display:flex; justify-content:center; gap:10px; margin-top:24px; }
+.t-btn {
+  width: 46px; height: 46px; background: transparent;
+  border: 0.5px solid var(--br); color: var(--muted);
+  font-size: 15px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.4s, color 0.4s, background 0.4s;
 }
+.t-btn:hover { border-color: var(--gold30); color: var(--gold); background: var(--gold08); }
 
-.loc-map-frame {
-  aspect-ratio: 4/3;
-  background: #1A1410;
-  border: 1px solid rgba(184,151,90,0.2);
-  position:relative; overflow:hidden;
-  display:flex; align-items:center; justify-content:center;
+/* ─── LOCATION ─── */
+#location { padding: 0; }
+.loc-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 600px; }
+
+.loc-map {
+  background: var(--char);
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
 }
-
-/* Stylized map grid */
+/* Map grid */
 .map-grid {
-  position:absolute; inset:0;
+  position: absolute; inset: 0;
   background-image:
-    linear-gradient(rgba(184,151,90,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(184,151,90,0.06) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(rgba(184,149,90,0.065) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,149,90,0.065) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+/* Ambient glow */
+.loc-map::before {
+  content: '';
+  position: absolute; top:50%; left:50%;
+  transform: translate(-50%,-50%);
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(184,149,90,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Road lines */
+.map-roads {
+  position: absolute; inset: 0; opacity: 0.18;
 }
 
 .map-pin {
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-60%);
-  display:flex; flex-direction:column; align-items:center; gap:0;
-  z-index:2;
+  position: absolute; top:50%; left:50%;
+  transform: translate(-50%, -62%);
+  display: flex; flex-direction: column; align-items: center;
+  z-index: 2;
 }
 .pin-dot {
-  width:14px; height:14px; border-radius:50%;
-  background:var(--gold); position:relative;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--gold); position: relative;
+  box-shadow: 0 0 20px var(--gold30);
 }
 .pin-dot::after {
-  content:''; position:absolute; inset:-5px;
-  border-radius:50%; border:1px solid rgba(184,151,90,0.5);
-  animation:pinPulse 2s ease-in-out infinite;
+  content: '';
+  position: absolute; inset: -6px;
+  border-radius: 50%; border: 0.5px solid var(--gold30);
+  animation: pp 2.4s ease-in-out infinite;
 }
-@keyframes pinPulse { 0%,100%{transform:scale(1);opacity:0.8} 50%{transform:scale(1.4);opacity:0.2} }
-.pin-line { width:1px; height:30px; background:var(--gold); }
-.pin-label {
-  background:var(--gold); color:var(--char);
-  font-size:11px; letter-spacing:0.1em;
-  padding:6px 14px; margin-top:0;
-  font-family:'Playfair Display',serif; font-style:italic;
+.pin-dot::before {
+  content: '';
+  position: absolute; inset: -14px;
+  border-radius: 50%; border: 0.5px solid var(--gold15);
+  animation: pp 2.4s ease-in-out infinite 0.4s;
+}
+@keyframes pp { 0%,100%{transform:scale(1);opacity:.8} 50%{transform:scale(1.4);opacity:.2} }
+.pin-stem { width: 0.5px; height: 32px; background: linear-gradient(to bottom, var(--gold), transparent); }
+.pin-lbl {
+  background: var(--gold); color: var(--char);
+  font-size: 10px; letter-spacing: 0.1em;
+  padding: 7px 16px;
+  font-family: 'Playfair Display', serif; font-style: italic;
+  box-shadow: 0 8px 24px rgba(184,149,90,0.3);
 }
 
-.loc-text .label { color:var(--warm); }
-
-.loc-heading {
-  font-family:'Playfair Display',serif;
-  font-size:clamp(36px,4vw,54px);
-  font-weight:400; color:var(--cream); line-height:1.15;
-  margin-bottom:28px;
+.loc-text {
+  background: var(--parch);
+  padding: 110px 88px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-left: 0.5px solid var(--br);
 }
-.loc-heading em { font-style:italic; color:var(--warm); }
-
-.loc-detail {
-  font-size:14px; color:rgba(247,242,234,0.5);
-  line-height:1.9; margin-bottom:8px;
+.loc-h {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 4vw, 58px);
+  font-weight: 300; color: var(--char); line-height: 1.1;
+  margin-bottom: 30px; letter-spacing: -0.015em;
 }
-.loc-detail strong { color:var(--warm); font-weight:400; }
-
-.loc-divider { width:40px; height:1px; background:rgba(184,151,90,0.4); margin:32px 0; }
-
-.loc-hours {
-  display:grid; grid-template-columns:1fr 1fr; gap:12px 32px; margin-bottom:40px;
+.loc-h em { font-style: italic; color: var(--charS); }
+.loc-d {
+  font-size: 14px; color: var(--muted);
+  line-height: 1.9; margin-bottom: 8px;
 }
-.h-day { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(247,242,234,0.35); }
-.h-time { font-size:14px; color:rgba(247,242,234,0.7); }
+.loc-d strong { color: var(--gold); font-weight: 400; }
+.loc-rule { width: 52px; height: 0.5px; background: var(--gold30); margin: 32px 0; }
+.loc-hrs {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px 32px; margin-bottom: 44px;
+}
+.hday {
+  font-size: 9px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.htime { font-size: 13.5px; color: var(--charS); }
 
 .btn-gold {
-  display:inline-block;
-  font-size:11px; letter-spacing:0.2em; text-transform:uppercase;
-  color:var(--char); background:var(--gold);
-  padding:14px 36px; text-decoration:none;
-  transition:background 0.3s, box-shadow 0.3s;
+  display: inline-block;
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--char); background: var(--gold);
+  padding: 15px 38px; text-decoration: none;
+  position: relative; overflow: hidden;
+  transition: background 0.4s, box-shadow 0.4s;
 }
-.btn-gold:hover { background:var(--warm); box-shadow:0 8px 30px rgba(184,151,90,0.3); }
+.btn-gold::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%); transition: transform 0.5s var(--ease-out);
+}
+.btn-gold:hover { background: var(--goldL); box-shadow: 0 8px 32px rgba(184,149,90,0.3); }
+.btn-gold:hover::before { transform: translateX(100%); }
 
-/* FINAL CTA */
+/* ─── CTA ─── */
 #cta {
-  background: var(--parchment);
-  text-align:center;
-  position:relative; overflow:hidden;
+  background: var(--parch);
+  text-align: center;
+  position: relative; overflow: hidden;
 }
-
 .cta-glow {
-  position:absolute; inset:0;
-  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(184,151,90,0.12) 0%, transparent 70%);
-  pointer-events:none;
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, var(--gold08) 0%, transparent 70%);
+  pointer-events: none;
+  animation: ctaGlow 8s ease-in-out infinite;
 }
-
-.cta-inner {
-  position:relative; z-index:1;
-  max-width:780px; margin:0 auto;
+@keyframes ctaGlow {
+  0%,100%{opacity:.6; transform:scale(.95)}
+  50%{opacity:1; transform:scale(1.05)}
 }
-
-.cta-small {
-  font-size:11px; letter-spacing:0.35em; text-transform:uppercase;
-  color:var(--gold); display:block; margin-bottom:20px;
+.cta-inner { position:relative; z-index:1; max-width:820px; margin:0 auto; }
+.cta-sm {
+  font-size: 9px; letter-spacing: 0.45em;
+  text-transform: uppercase; color: var(--gold);
+  display: block; margin-bottom: 22px;
 }
-
-.cta-heading {
-  font-family:'Playfair Display',serif;
-  font-size:clamp(48px,6vw,88px);
-  font-weight:400; line-height:1.05;
-  color:var(--char); margin-bottom:20px;
+.cta-h {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 7.5vw, 100px);
+  font-weight: 300; line-height: 0.96;
+  letter-spacing: -0.025em; color: var(--char); margin-bottom: 22px;
 }
-.cta-heading em { font-style:italic; color:var(--char-soft); }
-
+.cta-h em { font-style: italic; color: var(--charS); }
 .cta-sub {
-  font-size:15px; line-height:1.8;
-  color:var(--muted); margin-bottom:48px;
+  font-size: 14px; line-height: 1.95;
+  color: var(--muted); margin-bottom: 52px; letter-spacing: 0.01em;
 }
+.cta-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
 
-/* FOOTER */
+/* ─── FOOTER ─── */
 footer {
-  background:var(--char);
-  padding:64px 60px 32px;
+  background: var(--char);
+  border-top: 0.5px solid rgba(255,255,255,0.06);
+  padding: 80px 72px 40px;
+}
+.ft-top {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 56px; padding-bottom: 64px;
+  border-bottom: 0.5px solid rgba(255,255,255,0.07);
+}
+.ft-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; color: rgba(246,239,226,0.88);
+  text-decoration: none; display: block; margin-bottom: 10px;
+  font-weight: 300; letter-spacing: 0.04em;
+  transition: color 0.3s;
+}
+.ft-brand:hover { color: var(--sand); }
+.ft-tag {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 15px; color: rgba(204,186,150,0.3); margin-bottom: 28px;
+}
+.ft-socs { display:flex; gap:8px; margin-top:24px; }
+.ft-soc {
+  width: 36px; height: 36px;
+  border: 0.5px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(204,186,150,0.35); text-decoration: none;
+  font-size: 10.5px;
+  transition: border-color 0.4s, color 0.4s, background 0.4s;
+}
+.ft-soc:hover { border-color: var(--sand); color: var(--sand); background: rgba(184,149,90,0.08); }
+.ft-col h5 {
+  font-size: 8px; letter-spacing: 0.45em;
+  text-transform: uppercase; color: rgba(184,149,90,0.4); margin-bottom: 20px;
+}
+.ft-col ul { list-style: none; }
+.ft-col ul li { margin-bottom: 13px; }
+.ft-col ul li a {
+  font-size: 13px; color: rgba(204,186,150,0.4);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.ft-col ul li a:hover { color: var(--sand); }
+.ft-col p { font-size: 13px; color: rgba(204,186,150,0.4); line-height: 2.0; }
+.ft-bot {
+  padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.ft-copy { font-size: 11px; color: rgba(246,239,226,0.15); letter-spacing: 0.04em; }
+.ft-cred {
+  font-family: 'Playfair Display', serif; font-style: italic;
+  font-size: 13px; color: rgba(184,149,90,0.2);
 }
 
-.footer-top {
-  display:flex; justify-content:space-between; align-items:flex-start;
-  padding-bottom:48px;
-  border-bottom:1px solid rgba(247,242,234,0.08);
-  flex-wrap:wrap; gap:40px;
-}
-
-.footer-brand {
-  font-family:'Playfair Display',serif;
-  font-size:20px; color:var(--cream);
-  text-decoration:none; display:block; margin-bottom:10px;
-}
-.footer-tagline {
-  font-family:'Playfair Display',serif; font-style:italic;
-  font-size:14px; color:rgba(247,242,234,0.35);
-}
-
-.footer-col h5 {
-  font-size:9px; letter-spacing:0.35em; text-transform:uppercase;
-  color:rgba(200,173,133,0.4); margin-bottom:18px;
-}
-.footer-col ul { list-style:none; }
-.footer-col ul li { margin-bottom:10px; }
-.footer-col ul li a {
-  font-size:13px; color:rgba(247,242,234,0.45);
-  text-decoration:none; transition:color 0.3s;
-}
-.footer-col ul li a:hover { color:var(--warm); }
-.footer-col p { font-size:13px; color:rgba(247,242,234,0.45); line-height:1.8; }
-
-.footer-socials { display:flex; gap:12px; margin-top:16px; }
-.f-social {
-  width:34px; height:34px;
-  border:1px solid rgba(247,242,234,0.12);
-  display:flex; align-items:center; justify-content:center;
-  color:rgba(247,242,234,0.35); font-size:12px; text-decoration:none;
-  transition:border-color 0.3s, color 0.3s;
-}
-.f-social:hover { border-color:var(--warm); color:var(--warm); }
-
-.footer-bottom {
-  padding-top:24px;
-  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
-}
-.footer-bottom p { font-size:11px; color:rgba(247,242,234,0.2); letter-spacing:0.05em; }
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  nav { padding:20px 24px; }
-  nav.scrolled { padding:14px 24px; }
-  .nav-links { display:none; }
-  section { padding:90px 24px; }
-  .hero-content { grid-template-columns:1fr; padding:0 24px 80px; }
-  .story-inner, .loc-inner { grid-template-columns:1fr; gap:48px; }
-  .menu-grid { grid-template-columns:1fr; }
-  .gallery-mosaic { grid-template-columns:1fr 1fr; grid-template-rows:auto; }
-  .g-item:first-child { grid-row:span 1; }
-  footer { padding:48px 24px 24px; }
-  .footer-top { flex-direction:column; gap:32px; }
-  .footer-bottom { flex-direction:column; text-align:center; }
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  nav { padding: 20px 28px; }
+  nav.sc { padding: 14px 28px; }
+  .nlinks { display: none; }
+  .sec { padding: 100px 28px; }
+  .h-cont { grid-template-columns: 1fr; padding: 0 28px 100px; }
+  .h-title { font-size: 64px; }
+  .h-scroll { right: 28px; }
+  .story-grid, .loc-grid { grid-template-columns: 1fr; }
+  .story-left, .story-right, .loc-text { padding: 80px 36px; }
+  #menu { padding-left: 0; padding-right: 0; }
+  .mn-head { padding: 0 28px; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .mn-grid { grid-template-columns: 1fr; margin: 0 28px; max-width: calc(100% - 56px); }
+  .atm-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 280px 280px 280px; }
+  .a-item:first-child { grid-row: span 1; }
+  .atm-head { padding: 0 28px; }
+  footer { padding: 64px 28px 36px; }
+  .ft-top { grid-template-columns: 1fr 1fr; }
+  .t-slide { padding: 0 32px; }
+  .cta-btns { flex-direction: column; align-items: center; }
 }
 </style>
 </head>
 <body>
+<div id="cur"></div>
+<div id="curR"></div>
 
-<!-- Custom cursor -->
-<div class="cursor" id="cur"></div>
-<div class="cursor-ring" id="curR"></div>
-
-<!-- LOADER -->
+<!-- ── LOADER ── -->
 <div id="loader">
-  <div class="loader-mark">Islands Cafe</div>
-  <div class="loader-line"></div>
-  <div class="loader-sub">White Rock · British Columbia</div>
+  <div class="l-name">Islands Cafe</div>
+  <div class="l-bar"></div>
+  <div class="l-loc">White Rock · British Columbia</div>
 </div>
 
-<!-- NAVBAR -->
+<!-- ── NAVIGATION ── -->
 <nav id="nav">
-  <a href="#" class="nav-brand">
-    <span class="nav-brand-name">Islands Cafe</span>
-    <span class="nav-brand-loc">White Rock, BC</span>
+  <a href="#" class="nlogo">
+    <span class="nname">Islands Cafe</span>
+    <span class="nloc">White Rock, BC</span>
   </a>
-  <ul class="nav-links">
-    <li><a href="#story">Our Story</a></li>
+  <ul class="nlinks">
+    <li><a href="#story">Story</a></li>
     <li><a href="#menu">Menu</a></li>
-    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#atm">Atmosphere</a></li>
     <li><a href="#location">Visit</a></li>
   </ul>
-  <a href="#location" class="nav-cta">Find Us</a>
+  <a href="#location" class="nvisit">Find Us</a>
 </nav>
 
-<!-- ═══════════════ HERO ═══════════════ -->
+<!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-bg">
-    <div class="light-orb orb-1"></div>
-    <div class="light-orb orb-2"></div>
-    <div class="light-orb orb-3"></div>
-    <div class="hero-grid"></div>
-  </div>
-  <div class="hero-content">
-    <div class="hero-left">
-      <p class="hero-eyebrow">White Rock, British Columbia</p>
-      <h1 class="hero-title">Crafted<br>Moments.<br><em>Perfected</em><br>Coffee.</h1>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+  <div class="h-grid"></div>
+  <div class="h-wm" id="hwm">Islands</div>
+
+  <div class="h-cont">
+    <div class="h-left">
+      <div class="h-eyebrow">White Rock, British Columbia</div>
+      <h1 class="h-title">
+        Crafted<br>
+        Moments.<br>
+        <em><span class="ul">Perfected</span></em><br>
+        Coffee.
+      </h1>
     </div>
-    <div class="hero-right">
-      <p class="hero-desc">A premium café experience nestled on the shore of White Rock. Every cup, every plate, every morning — made with intention.</p>
-      <div class="hero-actions">
-        <a href="#menu" class="btn-outline">View Menu</a>
-        <a href="#location" class="btn-text">Visit Us <span class="btn-text-arrow">→</span></a>
+    <div class="h-right">
+      <p class="h-desc">A premium café experience nestled on the shore of White Rock. Every cup, every plate, every morning — made with absolute intention and care.</p>
+      <div class="h-ctas">
+        <a href="#menu" class="btn-line">View Menu</a>
+        <a href="#location" class="btn-txt">Visit Us <span>→</span></a>
       </div>
     </div>
   </div>
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-dot"></div>
+
+  <div class="h-scroll">
+    <span class="h-scroll-lbl">Discover</span>
+    <div class="h-scroll-dot"></div>
   </div>
 </section>
 
-<!-- ═══════════════ STORY ═══════════════ -->
-<section id="story">
-  <div class="story-inner" style="max-width:1300px;margin:0 auto;">
-    <div class="story-visual reveal">
-      <div class="story-img-frame">
-        <!-- Abstract coffee art SVG -->
-        <div class="coffee-art">
-          <svg width="360" height="420" viewBox="0 0 360 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Coffee cup silhouette -->
-            <path d="M100 180 L120 340 Q180 360 240 340 L260 180 Z" stroke="rgba(200,173,133,0.15)" stroke-width="1" fill="none"/>
-            <!-- Handle -->
-            <path d="M260 220 Q310 220 310 260 Q310 300 260 300" stroke="rgba(200,173,133,0.12)" stroke-width="1" fill="none"/>
-            <!-- Saucer -->
-            <ellipse cx="180" cy="350" rx="100" ry="14" stroke="rgba(200,173,133,0.1)" stroke-width="1" fill="none"/>
-            <!-- Steam lines -->
-            <path d="M150 170 Q155 140 148 110 Q141 80 148 50" stroke="rgba(200,173,133,0.25)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <path d="M180 165 Q186 135 179 105 Q172 75 179 45" stroke="rgba(200,173,133,0.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <path d="M210 170 Q216 140 209 110 Q202 80 209 50" stroke="rgba(200,173,133,0.15)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <!-- Coffee surface -->
-            <ellipse cx="180" cy="190" rx="78" ry="14" stroke="rgba(200,173,133,0.2)" stroke-width="1" fill="none"/>
-            <!-- Latte art swirl -->
-            <path d="M155 190 Q165 182 180 190 Q195 198 205 190" stroke="rgba(200,173,133,0.35)" stroke-width="1" fill="none"/>
-            <path d="M163 190 Q173 196 180 190 Q187 184 197 190" stroke="rgba(200,173,133,0.2)" stroke-width="1" fill="none"/>
-            <!-- Circle decorations -->
-            <circle cx="180" cy="210" r="60" stroke="rgba(184,151,90,0.08)" stroke-width="1" fill="none"/>
-            <circle cx="180" cy="210" r="90" stroke="rgba(184,151,90,0.05)" stroke-width="1" fill="none"/>
-            <!-- Cross lines -->
-            <line x1="60" y1="190" x2="300" y2="190" stroke="rgba(200,173,133,0.06)" stroke-width="1"/>
-            <line x1="180" y1="80" x2="180" y2="380" stroke="rgba(200,173,133,0.06)" stroke-width="1"/>
+<!-- ── MARQUEE ── -->
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span class="mq-item"><span class="mq-dot">✦</span>Single Origin Coffee</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Artisan Pastries</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Specialty Lattes</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Ceremonial Matcha</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>White Rock, BC</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Open Daily</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Crafted with Intention</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Single Origin Coffee</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Artisan Pastries</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Specialty Lattes</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Ceremonial Matcha</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>White Rock, BC</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Open Daily</span>
+    <span class="mq-item"><span class="mq-dot">✦</span>Crafted with Intention</span>
+  </div>
+</div>
+
+<!-- ── STORY ── -->
+<section id="story" style="padding:0">
+  <div class="story-grid">
+    <div class="story-left rvl">
+      <span class="sec-lbl story-lbl">Our Philosophy</span>
+      <h2 class="story-sh">Where Every<br><em>Cup Tells</em><br>a Story</h2>
+      <!-- Coffee SVG art -->
+      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.32;pointer-events:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 560" fill="none">
+        <defs>
+          <pattern id="stgr" width="52" height="52" patternUnits="userSpaceOnUse"><path d="M 52 0 L 0 0 0 52" fill="none" stroke="rgba(184,149,90,0.08)" stroke-width="0.5"/></pattern>
+          <radialGradient id="cg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(184,149,90,0.1)"/><stop offset="100%" stop-color="rgba(184,149,90,0)"/></radialGradient>
+        </defs>
+        <rect width="480" height="560" fill="url(#stgr)"/>
+        <ellipse cx="240" cy="280" rx="240" ry="280" fill="url(#cg)"/>
+        <!-- Cup -->
+        <path d="M140 270 L162 450 Q240 476 318 450 L340 270 Z" stroke="rgba(184,149,90,0.18)" stroke-width="1" fill="none"/>
+        <path d="M340 310 Q396 310 396 368 Q396 426 340 426" stroke="rgba(184,149,90,0.12)" stroke-width="1" fill="none"/>
+        <ellipse cx="240" cy="270" rx="100" ry="17" stroke="rgba(184,149,90,0.18)" stroke-width="1" fill="none"/>
+        <ellipse cx="240" cy="460" rx="120" ry="20" stroke="rgba(184,149,90,0.10)" stroke-width="1" fill="none"/>
+        <!-- Steam -->
+        <path d="M195 256 Q202 218 193 180 Q184 142 193 104" stroke="rgba(184,149,90,0.28)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M240 252 Q248 214 239 176 Q230 138 239 100" stroke="rgba(184,149,90,0.20)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M285 256 Q292 218 283 180 Q274 142 283 104" stroke="rgba(184,149,90,0.14)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- Latte art -->
+        <path d="M196 282 Q218 272 240 282 Q262 292 284 282" stroke="rgba(184,149,90,0.38)" stroke-width="1" fill="none"/>
+        <path d="M208 282 Q226 290 240 282 Q254 274 272 282" stroke="rgba(184,149,90,0.22)" stroke-width="1" fill="none"/>
+        <!-- Circles -->
+        <circle cx="240" cy="300" r="90" stroke="rgba(184,149,90,0.07)" stroke-width="0.5" fill="none"/>
+        <circle cx="240" cy="300" r="130" stroke="rgba(184,149,90,0.04)" stroke-width="0.5" fill="none"/>
+        <!-- Corners -->
+        <g stroke="rgba(184,149,90,0.25)" stroke-width="0.5">
+          <path d="M28 28 L28 54 M28 28 L54 28"/><path d="M452 28 L452 54 M452 28 L426 28"/>
+          <path d="M28 532 L28 506 M28 532 L54 532"/><path d="M452 532 L452 506 M452 532 L426 532"/>
+        </g>
+        <circle cx="240" cy="500" r="3" fill="rgba(184,149,90,0.55)"/>
+        <circle cx="240" cy="500" r="10" stroke="rgba(184,149,90,0.18)" stroke-width="0.5" fill="none"/>
+      </svg>
+    </div>
+    <div class="story-right rvr">
+      <div class="story-rule"></div>
+      <p class="story-p">At Islands Cafe, we believe the finest coffee is more than a drink — it is a ritual. We source single-origin beans with deep care, roast to order, and craft each beverage with the patience it truly deserves.</p>
+      <p class="story-p">Set against the beauty of White Rock's coastline, our café is a space to slow down, connect, and genuinely savour. From the first morning light to the golden hour, we are here for you.</p>
+      <div class="story-vals">
+        <div class="sv"><div class="sv-n">100%</div><div class="sv-l">Specialty beans</div></div>
+        <div class="sv"><div class="sv-n">Daily</div><div class="sv-l">Fresh pastries</div></div>
+        <div class="sv"><div class="sv-n">White Rock</div><div class="sv-l">BC's finest</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MENU ── -->
+<section id="menu" class="sec">
+  <div class="mn-head rv">
+    <div>
+      <span class="sec-lbl">What we serve</span>
+      <h2 class="sec-h">Menu <em>Highlights</em></h2>
+    </div>
+    <a href="#location" class="mn-head-link">Full menu in-store <span>→</span></a>
+  </div>
+  <div class="mn-grid">
+    <div class="mn-card rv d1">
+      <div class="mn-ico">☕</div>
+      <div class="mn-cat">Coffee · House</div>
+      <h3 class="mn-name">Single Origin<br><em>Espresso</em></h3>
+      <div class="mn-rule"></div>
+      <p class="mn-desc">Rich, complex, and beautifully balanced. Our rotating single-origin espresso showcases the finest farms each season has to offer.</p>
+      <div class="mn-price">From $4.50</div>
+    </div>
+    <div class="mn-card rv d2">
+      <div class="mn-ico">🌿</div>
+      <div class="mn-cat">Signature · Latte</div>
+      <h3 class="mn-name">Lavender &amp;<br><em>Honey Latte</em></h3>
+      <div class="mn-rule"></div>
+      <p class="mn-desc">House-made lavender syrup, raw local honey, and perfectly steamed oat milk. Gentle, floral, and utterly aromatic.</p>
+      <div class="mn-price">From $6.50</div>
+    </div>
+    <div class="mn-card rv d3">
+      <div class="mn-ico">🍃</div>
+      <div class="mn-cat">Tea · Ceremonial</div>
+      <h3 class="mn-name">Matcha<br><em>Ceremony</em></h3>
+      <div class="mn-rule"></div>
+      <p class="mn-desc">Ceremonial-grade Japanese matcha, whisked to order. Served traditionally or as a supremely refined premium latte.</p>
+      <div class="mn-price">From $6.00</div>
+    </div>
+    <div class="mn-card rv d1">
+      <div class="mn-ico">🥐</div>
+      <div class="mn-cat">Pastry · Morning</div>
+      <h3 class="mn-name">Butter<br><em>Croissant</em></h3>
+      <div class="mn-rule"></div>
+      <p class="mn-desc">Laminated in-house using cultured butter. Flaky, golden, warm. The perfect, inevitable accompaniment to your cup.</p>
+      <div class="mn-price">From $4.00</div>
+    </div>
+    <div class="mn-card rv d2">
+      <div class="mn-ico">🍫</div>
+      <div class="mn-cat">Coffee · Specialty</div>
+      <h3 class="mn-name">Dark Mocha<br><em>Reserve</em></h3>
+      <div class="mn-rule"></div>
+      <p class="mn-desc">Ecuadorian dark chocolate blended with a double-shot espresso. Bold, indulgent, and deeply, deeply satisfying.</p>
+      <div class="mn-price">From $6.00</div>
+    </div>
+    <div class="mn-card rv d3">
+      <div class="mn-ico">🍰</div>
+      <div class="mn-cat">Pastry · Artisan</div>
+      <h3 class="mn-name">Seasonal<br><em>Tart</em></h3>
+      <div class="mn-rule"></div>
+      <p class="mn-desc">Our pastry chef's daily creation using BC's finest seasonal produce. Ask us what is fresh today — it changes everything.</p>
+      <div class="mn-price">From $5.50</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ATMOSPHERE ── -->
+<section id="atm">
+  <div class="atm-head rv">
+    <span class="sec-lbl">Atmosphere</span>
+    <h2 class="sec-h">The <em>Experience</em></h2>
+  </div>
+  <div class="atm-grid rv d1">
+    <div class="a-item">
+      <div class="a-fill af1">
+        <div class="a-pat">
+          <svg width="100%" height="100%">
+            <defs><pattern id="ap1" width="58" height="58" patternUnits="userSpaceOnUse"><circle cx="29" cy="29" r="1.2" fill="rgba(184,149,90,0.16)"/><circle cx="29" cy="29" r="26" fill="none" stroke="rgba(184,149,90,0.05)" stroke-width="0.5"/></pattern></defs>
+            <rect width="100%" height="100%" fill="url(#ap1)"/>
+            <text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-size="96" fill="rgba(184,149,90,0.07)">☕</text>
           </svg>
         </div>
-        <div class="story-corner"></div>
-        <div class="story-corner-bl"></div>
       </div>
-      <div class="story-year">Est. in White Rock</div>
+      <div class="a-over"></div>
+      <span class="a-lbl">The Pour</span>
     </div>
-    <div class="story-text">
-      <span class="label reveal">Our Philosophy</span>
-      <h2 class="story-heading reveal d1">Where Every<br><em>Cup Tells</em><br>a Story</h2>
-      <div class="story-divider reveal d2"></div>
-      <p class="story-p reveal d2">At Islands Cafe, we believe the best coffee is more than a drink — it's a ritual. We source single-origin beans with care, roast to order, and craft each beverage with the patience it deserves.</p>
-      <p class="story-p reveal d3">Set against the beauty of White Rock's coastline, our café is a space to slow down, connect, and savour. From the first morning light to the golden hour, we're here.</p>
-      <div class="story-values reveal d3">
-        <div>
-          <div class="story-val-num">100%</div>
-          <div class="story-val-label">Specialty beans</div>
-        </div>
-        <div>
-          <div class="story-val-num">Daily</div>
-          <div class="story-val-label">Fresh pastries</div>
-        </div>
-        <div>
-          <div class="story-val-num">White Rock</div>
-          <div class="story-val-label">BC's own</div>
+    <div class="a-item">
+      <div class="a-fill af2">
+        <div class="a-pat">
+          <svg width="100%" height="100%">
+            <defs><pattern id="ap2" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M17 0 L34 17 L17 34 L0 17Z" fill="none" stroke="rgba(184,149,90,0.07)" stroke-width="0.5"/></pattern></defs>
+            <rect width="100%" height="100%" fill="url(#ap2)"/>
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="60" fill="rgba(184,149,90,0.09)">🌿</text>
+          </svg>
         </div>
       </div>
+      <div class="a-over"></div>
+      <span class="a-lbl">The Detail</span>
+    </div>
+    <div class="a-item">
+      <div class="a-fill af3">
+        <div class="a-pat">
+          <svg width="100%" height="100%">
+            <defs><pattern id="ap3" width="44" height="44" patternUnits="userSpaceOnUse"><path d="M0 0 L44 44 M44 0 L0 44" stroke="rgba(184,149,90,0.05)" stroke-width="0.5"/></pattern></defs>
+            <rect width="100%" height="100%" fill="url(#ap3)"/>
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="56" fill="rgba(184,149,90,0.1)">🥐</text>
+          </svg>
+        </div>
+      </div>
+      <div class="a-over"></div>
+      <span class="a-lbl">The Craft</span>
+    </div>
+    <div class="a-item">
+      <div class="a-fill af4">
+        <div class="a-pat">
+          <svg width="100%" height="100%">
+            <defs><pattern id="ap4" width="50" height="50" patternUnits="userSpaceOnUse"><line x1="0" y1="25" x2="50" y2="25" stroke="rgba(184,149,90,0.06)" stroke-width="0.5"/><line x1="25" y1="0" x2="25" y2="50" stroke="rgba(184,149,90,0.06)" stroke-width="0.5"/></pattern></defs>
+            <rect width="100%" height="100%" fill="url(#ap4)"/>
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="54" fill="rgba(184,149,90,0.09)" font-family="serif">✦</text>
+          </svg>
+        </div>
+      </div>
+      <div class="a-over"></div>
+      <span class="a-lbl">The Light</span>
+    </div>
+    <div class="a-item">
+      <div class="a-fill af5">
+        <div class="a-pat">
+          <svg width="100%" height="100%">
+            <defs><pattern id="ap5" width="44" height="44" patternUnits="userSpaceOnUse"><circle cx="22" cy="22" r="20" fill="none" stroke="rgba(184,149,90,0.06)" stroke-width="0.5"/></pattern></defs>
+            <rect width="100%" height="100%" fill="url(#ap5)"/>
+            <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="54" fill="rgba(184,149,90,0.09)">🍃</text>
+          </svg>
+        </div>
+      </div>
+      <div class="a-over"></div>
+      <span class="a-lbl">The Moment</span>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ MENU ═══════════════ -->
-<section id="menu">
-  <div class="menu-header reveal">
-    <div>
-      <span class="label">What we serve</span>
-      <h2 class="heading-xl">Menu <em>Highlights</em></h2>
-    </div>
-    <a href="#location" class="btn-text" style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:10px;transition:gap 0.3s;">Full menu in-store <span>→</span></a>
-  </div>
-  <div class="menu-grid">
-    <div class="menu-card reveal d1">
-      <div class="menu-icon-wrap">☕</div>
-      <div class="menu-cat">Coffee · House</div>
-      <h3 class="menu-name">Single Origin<br>Espresso</h3>
-      <div class="menu-line"></div>
-      <p class="menu-desc">Rich, complex, and balanced. Our rotating single-origin espresso showcases the finest farms each season.</p>
-      <div class="menu-price">From $4.50</div>
-    </div>
-    <div class="menu-card reveal d2">
-      <div class="menu-icon-wrap">🌿</div>
-      <div class="menu-cat">Signature · Latte</div>
-      <h3 class="menu-name">Lavender &<br>Honey Latte</h3>
-      <div class="menu-line"></div>
-      <p class="menu-desc">House-made lavender syrup, raw local honey, and perfectly steamed oat milk. Gentle and aromatic.</p>
-      <div class="menu-price">From $6.50</div>
-    </div>
-    <div class="menu-card reveal d3">
-      <div class="menu-icon-wrap">🍃</div>
-      <div class="menu-cat">Tea · Ceremonial</div>
-      <h3 class="menu-name">Matcha<br>Ceremony</h3>
-      <div class="menu-line"></div>
-      <p class="menu-desc">Ceremonial-grade Japanese matcha, whisked to order. Served traditionally or as a premium latte.</p>
-      <div class="menu-price">From $6.00</div>
-    </div>
-    <div class="menu-card reveal d1">
-      <div class="menu-icon-wrap">🥐</div>
-      <div class="menu-cat">Pastry · Morning</div>
-      <h3 class="menu-name">Butter<br>Croissant</h3>
-      <div class="menu-line"></div>
-      <p class="menu-desc">Laminated in-house using cultured butter. Flaky, golden, warm. A perfect accompaniment to your cup.</p>
-      <div class="menu-price">From $4.00</div>
-    </div>
-    <div class="menu-card reveal d2">
-      <div class="menu-icon-wrap">🍫</div>
-      <div class="menu-cat">Coffee · Specialty</div>
-      <h3 class="menu-name">Dark Mocha<br>Reserve</h3>
-      <div class="menu-line"></div>
-      <p class="menu-desc">Ecuadorian dark chocolate blended with double-shot espresso. Bold, indulgent, and deeply satisfying.</p>
-      <div class="menu-price">From $6.00</div>
-    </div>
-    <div class="menu-card reveal d3">
-      <div class="menu-icon-wrap">🍰</div>
-      <div class="menu-cat">Pastry · Artisan</div>
-      <h3 class="menu-name">Seasonal<br>Tart</h3>
-      <div class="menu-line"></div>
-      <p class="menu-desc">Our pastry chef's daily creation using BC's finest seasonal produce. Ask us what's fresh today.</p>
-      <div class="menu-price">From $5.50</div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ GALLERY ═══════════════ -->
-<section id="gallery">
-  <div class="gallery-header reveal">
-    <span class="label">Atmosphere</span>
-    <h2 class="heading-xl">The <em>Experience</em></h2>
-  </div>
-  <div class="gallery-mosaic reveal d1">
-    <div class="g-item">
-      <div class="g-fill gc-1" style="height:100%">
-        <div class="g-art">☕</div>
-        <div class="g-overlay"></div>
-        <span class="g-label">The Pour</span>
-      </div>
-    </div>
-    <div class="g-item">
-      <div class="g-fill gc-2">
-        <div class="g-art">🌿</div>
-        <div class="g-overlay"></div>
-        <span class="g-label">The Detail</span>
-      </div>
-    </div>
-    <div class="g-item">
-      <div class="g-fill gc-3">
-        <div class="g-art">🥐</div>
-        <div class="g-overlay"></div>
-        <span class="g-label">The Craft</span>
-      </div>
-    </div>
-    <div class="g-item">
-      <div class="g-fill gc-4">
-        <div class="g-art">✦</div>
-        <div class="g-overlay"></div>
-        <span class="g-label">The Light</span>
-      </div>
-    </div>
-    <div class="g-item">
-      <div class="g-fill gc-5">
-        <div class="g-art">🍃</div>
-        <div class="g-overlay"></div>
-        <span class="g-label">The Moment</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ TESTIMONIALS ═══════════════ -->
-<section id="testimonials">
-  <div class="t-inner">
-    <div class="reveal">
-      <span class="label">What guests say</span>
-      <h2 class="heading-xl" style="text-align:center">Words of <em>Warmth</em></h2>
-    </div>
-    <div class="t-slider reveal d2">
+<!-- ── TESTIMONIALS ── -->
+<section id="testimonials" class="sec">
+  <div class="t-wrap rv">
+    <span class="sec-lbl">Guests say</span>
+    <h2 class="sec-h">Words of <em>Warmth</em></h2>
+    <div class="t-slides-wrap">
       <div class="t-slides" id="tSlides">
         <div class="t-slide">
-          <div class="t-quote-mark">"</div>
+          <div class="t-q">"</div>
           <div class="t-stars">★★★★★</div>
-          <p class="t-text">There's something genuinely different about Islands. The coffee is exceptional — you can taste the care in every single cup. It's become my morning ritual in White Rock.</p>
-          <div class="t-author">Sarah M.</div>
+          <p class="t-body">There's something genuinely different about Islands. The coffee is exceptional — you can taste the care and intention in every single cup. It has become my daily ritual in White Rock.</p>
+          <div class="t-auth">Sarah M.</div>
         </div>
         <div class="t-slide">
-          <div class="t-quote-mark">"</div>
+          <div class="t-q">"</div>
           <div class="t-stars">★★★★★</div>
-          <p class="t-text">The lavender honey latte is unlike anything I've had before. The ambiance, the light, the staff — everything about Islands feels curated and warm. A true hidden gem.</p>
-          <div class="t-author">James K.</div>
+          <p class="t-body">The lavender honey latte is unlike anything I have tasted anywhere. The ambiance, the light, the staff — everything about Islands feels curated, warm, and wonderfully alive.</p>
+          <div class="t-auth">James K.</div>
         </div>
         <div class="t-slide">
-          <div class="t-quote-mark">"</div>
+          <div class="t-q">"</div>
           <div class="t-stars">★★★★★</div>
-          <p class="t-text">Croissants that rival anything I've tasted in Paris, paired with a perfectly balanced espresso. Islands Cafe is what White Rock needed — and more.</p>
-          <div class="t-author">Priya D.</div>
+          <p class="t-body">Croissants that rival anything I have tasted in Paris, paired with a perfectly balanced espresso. Islands Cafe is exactly what White Rock needed — and so much more.</p>
+          <div class="t-auth">Priya D.</div>
         </div>
         <div class="t-slide">
-          <div class="t-quote-mark">"</div>
+          <div class="t-q">"</div>
           <div class="t-stars">★★★★★</div>
-          <p class="t-text">Every visit feels like a pause from the world. The quality is consistently outstanding and the staff genuinely care about every guest's experience. I'm a regular for life.</p>
-          <div class="t-author">Thomas R.</div>
+          <p class="t-body">Every single visit feels like a genuine pause from the world. The quality is consistently outstanding and the staff care deeply about every guest's experience. A regular for life.</p>
+          <div class="t-auth">Thomas R.</div>
         </div>
       </div>
     </div>
     <div class="t-dots" id="tDots">
-      <button class="t-dot active" data-i="0"></button>
+      <button class="t-dot on" data-i="0"></button>
       <button class="t-dot" data-i="1"></button>
       <button class="t-dot" data-i="2"></button>
       <button class="t-dot" data-i="3"></button>
     </div>
+    <div class="t-nav">
+      <button class="t-btn" id="tPr">←</button>
+      <button class="t-btn" id="tNx">→</button>
+    </div>
   </div>
 </section>
 
-<!-- ═══════════════ LOCATION ═══════════════ -->
-<section id="location">
-  <div class="loc-inner">
-    <div class="loc-map-frame reveal">
+<!-- ── LOCATION ── -->
+<section id="location" style="padding:0">
+  <div class="loc-grid">
+    <div class="loc-map rvl">
       <div class="map-grid"></div>
-      <!-- Subtle road lines -->
-      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.15" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="55%" x2="100%" y2="55%" stroke="#B8975A" stroke-width="1"/>
-        <line x1="40%" y1="0" x2="40%" y2="100%" stroke="#B8975A" stroke-width="1"/>
-        <line x1="0" y1="30%" x2="100%" y2="30%" stroke="#B8975A" stroke-width="0.5"/>
-        <line x1="70%" y1="0" x2="70%" y2="100%" stroke="#B8975A" stroke-width="0.5"/>
+      <svg class="map-roads" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+        <line x1="0" y1="52%" x2="100%" y2="52%" stroke="#B8955A" stroke-width="1"/>
+        <line x1="44%" y1="0" x2="44%" y2="100%" stroke="#B8955A" stroke-width="1"/>
+        <line x1="0" y1="27%" x2="100%" y2="27%" stroke="#B8955A" stroke-width="0.5"/>
+        <line x1="0" y1="75%" x2="100%" y2="75%" stroke="#B8955A" stroke-width="0.5"/>
+        <line x1="72%" y1="0" x2="72%" y2="100%" stroke="#B8955A" stroke-width="0.5"/>
+        <line x1="18%" y1="0" x2="18%" y2="100%" stroke="#B8955A" stroke-width="0.5"/>
       </svg>
       <div class="map-pin">
         <div class="pin-dot"></div>
-        <div class="pin-line"></div>
-        <div class="pin-label">Islands Cafe</div>
+        <div class="pin-stem"></div>
+        <div class="pin-lbl">Islands Cafe</div>
       </div>
     </div>
-    <div class="loc-text">
-      <span class="label reveal">Come see us</span>
-      <h2 class="loc-heading reveal d1">Find Us in<br><em>White Rock</em></h2>
-      <div class="loc-detail reveal d2"><strong>Address</strong><br>White Rock, British Columbia, Canada</div>
-      <div class="loc-divider reveal d2"></div>
-      <div class="loc-hours reveal d3">
-        <span class="h-day">Mon – Fri</span>
-        <span class="h-time">7:00 am – 6:00 pm</span>
-        <span class="h-day">Saturday</span>
-        <span class="h-time">8:00 am – 6:00 pm</span>
-        <span class="h-day">Sunday</span>
-        <span class="h-time">8:00 am – 5:00 pm</span>
+    <div class="loc-text rvr">
+      <span class="sec-lbl">Come see us</span>
+      <h2 class="loc-h">Find Us in<br><em>White Rock</em></h2>
+      <p class="loc-d"><strong>Address</strong><br>White Rock, British Columbia, Canada</p>
+      <div class="loc-rule"></div>
+      <div class="loc-hrs">
+        <span class="hday">Mon – Fri</span><span class="htime">7:00 am – 6:00 pm</span>
+        <span class="hday">Saturday</span><span class="htime">8:00 am – 6:00 pm</span>
+        <span class="hday">Sunday</span><span class="htime">8:00 am – 5:00 pm</span>
       </div>
-      <a href="https://www.google.com/maps/search/Islands+Cafe+White+Rock+BC" target="_blank" class="btn-gold reveal d4">Get Directions</a>
+      <a href="https://www.google.com/maps/search/Islands+Cafe+White+Rock+BC" target="_blank" class="btn-gold">Get Directions</a>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ FINAL CTA ═══════════════ -->
-<section id="cta">
+<!-- ── CTA ── -->
+<section id="cta" class="sec">
   <div class="cta-glow"></div>
-  <div class="cta-inner">
-    <span class="cta-small reveal">A moment awaits</span>
-    <h2 class="cta-heading reveal d1">Visit Us<br><em>Today</em></h2>
-    <p class="cta-sub reveal d2">White Rock's premium café experience. Come for the coffee. Stay for the feeling.</p>
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" class="reveal d3">
-      <a href="#menu" class="btn-outline">Explore Menu</a>
+  <div class="cta-inner rv">
+    <span class="cta-sm">A moment awaits</span>
+    <h2 class="cta-h">Visit Us<br><em>Today</em></h2>
+    <p class="cta-sub">White Rock's premium café experience.<br>Come for the coffee. Stay for the feeling.</p>
+    <div class="cta-btns">
+      <a href="#menu" class="btn-line">Explore Menu</a>
       <a href="https://www.google.com/maps/search/Islands+Cafe+White+Rock+BC" target="_blank" class="btn-gold">Find Our Cafe</a>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ FOOTER ═══════════════ -->
+<!-- ── FOOTER ── -->
 <footer>
-  <div class="footer-top">
+  <div class="ft-top">
     <div>
-      <a href="#" class="footer-brand">Islands Cafe</a>
-      <p class="footer-tagline">Crafted Moments. Perfected Coffee.</p>
-      <div class="footer-socials" style="margin-top:20px;">
-        <a href="#" class="f-social">ig</a>
-        <a href="#" class="f-social">fb</a>
-        <a href="#" class="f-social">tt</a>
+      <a href="#" class="ft-brand">Islands Cafe</a>
+      <p class="ft-tag">Crafted Moments. Perfected Coffee.</p>
+      <div class="ft-socs">
+        <a href="#" class="ft-soc">ig</a>
+        <a href="#" class="ft-soc">fb</a>
+        <a href="#" class="ft-soc">tt</a>
       </div>
     </div>
-    <div class="footer-col">
+    <div class="ft-col">
       <h5>Menu</h5>
       <ul>
-        <li><a href="#menu">Espresso & Coffee</a></li>
+        <li><a href="#menu">Espresso &amp; Coffee</a></li>
         <li><a href="#menu">Specialty Lattes</a></li>
-        <li><a href="#menu">Matcha & Tea</a></li>
+        <li><a href="#menu">Matcha &amp; Tea</a></li>
         <li><a href="#menu">Artisan Pastries</a></li>
       </ul>
     </div>
-    <div class="footer-col">
+    <div class="ft-col">
       <h5>Visit</h5>
-      <p>White Rock<br>British Columbia<br>Canada<br><br>Mon–Fri: 7am – 6pm<br>Sat–Sun: 8am – 5pm</p>
+      <p>White Rock<br>British Columbia, Canada<br><br>Mon–Fri: 7am – 6pm<br>Sat–Sun: 8am – 5pm</p>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>© 2025 Islands Cafe · White Rock, BC</p>
-    <p style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(200,173,133,0.25);font-size:13px;">Crafted with intention.</p>
+  <div class="ft-bot">
+    <p class="ft-copy">© 2025 Islands Cafe · White Rock, BC</p>
+    <p class="ft-cred">Crafted with intention.</p>
   </div>
 </footer>
 
 <script>
-// Cursor
-const cur = document.getElementById('cur');
-const curR = document.getElementById('curR');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-function animRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(animRing);}
-animRing();
-document.querySelectorAll('a,button,.menu-card,.g-item').forEach(el=>{
-  el.addEventListener('mouseenter',()=>curR.classList.add('hover'));
-  el.addEventListener('mouseleave',()=>curR.classList.remove('hover'));
+/* ── CURSOR ── */
+const cur = document.getElementById('cur'), curR = document.getElementById('curR');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx+'px'; cur.style.top = my+'px'; });
+document.addEventListener('mousedown', () => cur.classList.add('click'));
+document.addEventListener('mouseup', () => cur.classList.remove('click'));
+(function loop(){ rx+=(mx-rx)*0.095; ry+=(my-ry)*0.095; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(loop); })();
+document.querySelectorAll('a,button,.mn-card,.a-item').forEach(el => {
+  el.addEventListener('mouseenter', () => { curR.classList.add('hover'); cur.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { curR.classList.remove('hover'); cur.classList.remove('hover'); });
 });
 
-// Loader
-window.addEventListener('load',()=>{
-  setTimeout(()=>document.getElementById('loader').classList.add('out'),1600);
-});
+/* ── LOADER ── */
+window.addEventListener('load', () =>
+  setTimeout(() => document.getElementById('loader').classList.add('gone'), 2000)
+);
 
-// Navbar
-const nav = document.getElementById('nav');
-window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60));
+/* ── NAV ── */
+window.addEventListener('scroll', () =>
+  document.getElementById('nav').classList.toggle('sc', scrollY > 80),
+  { passive: true }
+);
 
-// Reveal
-const revEls = document.querySelectorAll('.reveal');
-const ro = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
-},{threshold:0.1});
-revEls.forEach(r=>ro.observe(r));
+/* ── REVEAL ── */
+const obs = new IntersectionObserver(entries =>
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); }),
+  { threshold: 0.08 }
+);
+document.querySelectorAll('.rv, .rvl, .rvr').forEach(el => obs.observe(el));
 
-// Testimonials auto-slider
-let cur_t=0;
-const slides=document.getElementById('tSlides');
-const dots=document.querySelectorAll('.t-dot');
-function goTo(i){
-  cur_t=i;
-  slides.style.transform=`translateX(${-i*100}%)`;
-  dots.forEach((d,j)=>d.classList.toggle('active',j===i));
+/* ── TESTIMONIALS ── */
+let tc = 0;
+const tSlides = document.getElementById('tSlides');
+const tDots = document.querySelectorAll('.t-dot');
+const TLEN = 4;
+function goTo(i) {
+  tc = ((i % TLEN) + TLEN) % TLEN;
+  tSlides.style.transform = `translateX(${-tc * 100}%)`;
+  tDots.forEach((d, j) => d.classList.toggle('on', j === tc));
 }
-dots.forEach(d=>d.addEventListener('click',()=>goTo(+d.dataset.i)));
-setInterval(()=>goTo((cur_t+1)%4),4500);
+tDots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
+document.getElementById('tNx').addEventListener('click', () => goTo(tc + 1));
+document.getElementById('tPr').addEventListener('click', () => goTo(tc - 1));
+setInterval(() => goTo(tc + 1), 5500);
 
-// Parallax hero title on scroll
-window.addEventListener('scroll',()=>{
-  const sy=window.scrollY;
-  const heroTitle=document.querySelector('.hero-title');
-  if(heroTitle&&sy<window.innerHeight){
-    heroTitle.style.transform=`translateY(${sy*0.18}px)`;
-  }
-});
+/* ── PARALLAX WATERMARK ── */
+const hwm = document.getElementById('hwm');
+window.addEventListener('scroll', () => {
+  if (hwm && scrollY < innerHeight)
+    hwm.style.transform = `translateY(calc(-50% + ${scrollY * 0.12}px))`;
+}, { passive: true });
 </script>
 </body>
 </html>
